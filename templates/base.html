@@ -12,13 +12,23 @@
     {% compress css %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
     {% endcompress %}
+
+    <script src="{% static 'vendors/htmx.min.js' %}" defer></script>
+    <script src="{% static 'vendors/alpine.min.js' %}" defer></script>
+
   </head>
   <body>
+    {% include "navbar.html" %}
     <!-- -->
-    {% block content %}
-    <!-- -->
-    {% endblock content %}
+    
+    <main class="mx-auto max-w-screen-xl p-4">
+      {% block content %}
 
-    <script src="{% static 'vendors/flowbite.min.js' %}"></script>
+      {% endblock content %}
+    </main>
+    <!-- -->
+
+    <!-- -->
+    {% include "includes/scripts.html" %}
   </body>
 </html>

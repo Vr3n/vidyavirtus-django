@@ -1,7 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <main class="mx-auto max-w-screen-xl">
-    <h1 class="text-2xl text-blue-600">Hello, Friend</h1>
-  </main>
+<section class="my-2">
+  <div class="flex justify-between">
+    <h2 class="text-2xl font-bold">Hello, Viren Patel</h2>
+    <span>
+      <c-button.primary>
+        Add new job shortlist
+      </c-button.primary>
+      <c-button.outline>
+        Schedule interview
+      </c-button>
+    </span>
+  </div>
+</section>
 {% endblock content %}

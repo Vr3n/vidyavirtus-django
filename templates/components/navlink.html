@@ -1,0 +1,6 @@
+{% for link in links %}
+<li>
+  <a href="{{ link.href }}" class="block py-2 px-3 text-gray-500 rounded cursor-pointer transition-all delay-150 hover:text-blue-700 hover:font-semibold md:bg-transparent md:p-0 dark:text-white">{{ link.text }}</a>
+</li>
+{% endfor %}
+
