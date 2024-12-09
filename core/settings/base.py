@@ -38,14 +38,19 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'custom_commands.apps.CustomCommandsConfig',
     'django.contrib.staticfiles',
     "django_browser_reload",
     'compressor',
     'django_cotton',
+
     'allauth',
     'allauth.account',
     'allauth.socialaccount.providers.google',
+    'djmoney',
+
     'users',
+    'jobshortlists',
 ]
 
 MIDDLEWARE = [
