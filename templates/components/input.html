@@ -1,8 +1,8 @@
-<c-vars type="text" errors />
+<c-vars type="text" errors required />
 
 <div class="{{ div_class }}">
-  <label for="{{ id }}" class="block mb-2 text-sm font-medium text-green-700 dark:text-gray-500">Your name</label>
-  <input {{ attrs }}  type="{{ type }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
+  <label for="{{ id }}" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-500  {% if required %} after:content-['*'] after:text-red-600 {% endif %}">{{ label }}</label>
+  <input {{ attrs }}  type="{{ type }}" class="w-full rounded-md shadow-md {% if errors %}border-red-500{% endif %} hover:bg-gray-100 hover:shadow-lg hover:border-blue-800 focus:shadow-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
   {% if errors %}
     <div class="my-2 text-sm text-red-600 dark:text-red-500">{{ errors.as_text }}</div>
   {% endif %}

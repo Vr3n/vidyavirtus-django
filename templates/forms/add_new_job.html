@@ -1,1 +1,91 @@
-{{ form }}
+<form
+  hx-post="{% url 'hx_add_joblist' %}"
+>
+  <div class="grid grid-cols gap-4 p-4 justify-around items-stretch md:grid-cols-3 ld:grid-cols-4">
+    <!-- -->
+    <c-select label="Status" :errors="form.status.errors" div_class="status_wrapper" name="status" id="status_select" required>
+      {% for status in job_statuses %}
+      <option value="{{ status.id }}">{{ status.name }}</option>
+      {% endfor %}
+    </c-select>
+    <!-- -->
+    <div class="w-full">
+      <div x-data="{ 
+        'search': '',
+        'open': false,
+        'selected_value': '' ,
+        toggle () { 
+        if (this.search.length >= 1) {
+        this.open = true;
+        } else {
+        this.open = false;
+        this.selected_value = null;
+        document.querySelector('#company_id').value = this.selected_value;
+        }
+        },
+        selectValue (value, name) {
+        this.selected_value = value;
+        this.search = name;
+        this.open = false;
+        },
+        }">
+        <div class="relative w-full">
+          <input x-model="selected_value" id="company_id" type="hidden" name="company_name" />
+          <c-input
+            type="text" 
+            id="search_company"
+            label="Company Name"
+            placeholder="The company you will be applying at"
+            name="search_company" 
+            x-model="search"
+            @keyup.debounce="toggle()"
+            @keydown="if ($event.ctrlKey && $event.key === ' ') { !this.open }"
+            hx-post="{% url 'hx_company_filter' %}"
+            hx-trigger="input changed delay:500ms, search"
+            hx-target="#search_results"
+            hx-swap="outerHTML"
+            required
+          />
+          <div id="search_results" x-show="open" class="absolute w-full">
+          </div>
+        </div>
+        {% if form.company_name.errors %}
+          <div class="my-2 text-sm text-red-600 dark:text-red-500">{{ form.job_description.as_text }}</div>
+        {% endif %}
+      </div>
+      <script>
+      document.body.addEventListener("company_added", function (evt) {
+        let cid = document.getElementById('company_id')
+        console.log(evt.detail.id);
+        cid.value = evt.detail.id;
+      })
+      </script>
+    </div>
+    <c-input name="job_title" :errors="form.job_title.errors" placeholder="Title of the job." div_class="job_title_wrapper" id="job_title" label="Job Title" required />
+    <c-select label="Job Type" :errors="form.job_type.errors" div_class="job_type_wrapper" name="job_type" id="job_type_select" required>
+      {% for job_type in job_types %}
+      <option value="{{ job_type.id }}">{{ job_type.job_type }}</option>
+      {% endfor %}
+    </c-select>
+    <c-input :errors="form.location.errors" name="location" placeholder="Location of the Job" div_class="location_wrapper" id="location" label="Job Location" />
+    <c-input :errors="form.min_salary.errors" name="min_salary" type="number" div_class="min_salary_wrapper" id="min_salary" label="Min Salary" />
+    <c-input :errors="form.max_salary.errors" name="max_salary" type="number" div_class="max_salary_wrapper" id="max_salary" label="Max Salary" />
+    <div class="flex gap-2">
+      <c-input :errors="form.source.errors" name="source" placeholder="Source of the Job" div_class="source_wrapper" id="source" label="Source" />
+      <c-input :errors="form.url.errors" name="url" placeholder="Url you found job from." div_class="url_wrapper" id="url" label="Url" />
+    </div>
+    <div class="col-span-3 lg:col-span-4">
+      <label for="job_description">Job Description</label>
+      <textarea name="job_description" 
+        class="w-full rounded-md shadow-md hover:bg-gray-100 hover:shadow-lg hover:border-blue-800 focus:shadow-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+        div_class="description_wrapper" id="job_description" 
+        label="Job Description" rows="2"></textarea>
+      {% if form.job_description.errors %}
+        <div class="my-2 text-sm text-red-600 dark:text-red-500">{{ form.job_description.as_text }}</div>
+      {% endif %}
+    </div>
+  </div>
+  <c-button.primary type="submit" custom_class="mx-4">
+    Submit
+  </c-button.primary>
+</form>

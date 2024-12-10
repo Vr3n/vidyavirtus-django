@@ -32,54 +32,20 @@
     <div class="relative overflow-x-auto">
       {% include 'partials/job_shortlist_table.html' %}
     </div>
-    <div x-data="{ 
-      'search': '',
-      'open': false,
-      'selected_value': '' ,
-      toggle () { 
-        if (this.search.length >= 1) {
-          this.open = true;
-        } else {
-          this.open = false;
-          this.selected_value = null;
-          document.querySelector('#company_id').value = this.selected_value;
-        }
-      },
-      selectValue (value, name) {
-        this.selected_value = value;
-        this.search = name;
-        this.open = false;
-      },
-    }">
-      <div class="relative max-w-fit">
-        <p for="search_company">Search Company</p>
-        <input x-model="selected_value" id="company_id" type="hidden" name="company" />
-        <input
-            type="text" 
-            id="search_company"
-            name="company_name" 
-            x-model="search"
-            @keyup.debounce="toggle()"
-            @keydown="if ($event.ctrlKey && $event.key === ' ') { !this.open }"
-            hx-post="{% url 'hx_company_filter' %}"
-            hx-trigger="input changed delay:500ms, search"
-            hx-target="#search_results"
-            hx-swap="outerHTML"
-        />
-        <div id="search_results" x-show="open" class="absolute w-full">
-        </div>
-      </div>
-    </div>
   </c-card>
 </section>
 {% endblock content %}
 
 {% block custom_js %}
 <script>
-  document.body.addEventListener("company_added", function (evt) {
-    let cid = document.getElementById('company_id')
-    console.log(evt.detail.id);
-    cid.value = evt.detail.id;
+  document.body.addEventListener('job_added', function (evt) {
+    let btn_el = document.getElementById("drawer_hide");
+    let clickEvent = new MouseEvent("click", { "view": window,
+      "bubbles": true,
+      "cancelable": false
+    });
+
+    btn_el.dispatchEvent(clickEvent);
   })
 </script>
 {% endblock custom_js %}

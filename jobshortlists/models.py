@@ -89,16 +89,17 @@ class JobApplication(BaseModel):
     location = models.CharField(_("Location"), max_length=255)
     min_salary = MoneyField(max_digits=19,
                             decimal_places=4,
-                            default_currency='INR', null=True)
+                            default_currency='INR', blank=True, null=True)
     max_salary = MoneyField(max_digits=19,
                             decimal_places=4,
-                            default_currency='INR', null=True)
+                            default_currency='INR', blank=True, null=True)
     source = models.CharField(_("Source of Job"),
                               max_length=255, blank=True, null=True)
     job_url = models.URLField(blank=True, null=True)
     interest = models.CharField(max_length=255,
                                 choices=JobInterest.choices,
                                 null=True, blank=True)
+    job_description = models.TextField(null=True, blank=True)
 
 
 class ResumeSubmitted(BaseModel):

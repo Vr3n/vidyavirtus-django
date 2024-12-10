@@ -1,0 +1,46 @@
+<div x-data="{ 
+  'search': '',
+  'open': false,
+  'selected_value': '' ,
+  toggle () { 
+    if (this.search.length >= 1) {
+      this.open = true;
+    } else {
+      this.open = false;
+      this.selected_value = null;
+      document.querySelector('#company_id').value = this.selected_value;
+    }
+  },
+  selectValue (value, name) {
+    this.selected_value = value;
+    this.search = name;
+    this.open = false;
+  },
+}">
+  <div class="relative max-w-fit">
+    <label class="block my-2" for="search_company">Search Company</label>
+    <input x-model="selected_value" id="{{ name }}_id" type="hidden" name="{{ name }}" />
+    <input
+        type="text" 
+        id="search_{{name}}"
+        name="{{ filter_name }}" 
+        x-model="search"
+        @keyup.debounce="toggle()"
+        @keydown="if ($event.ctrlKey && $event.key === ' ') { !this.open }"
+        hx-post="{% url 'hx_company_filter' %}"
+        hx-trigger="input changed delay:500ms, search"
+        hx-target="#search_results_{{ filter_name }}"
+        hx-swap="outerHTML"
+    />
+    <div id="search_results_{{ filter_name }}" x-show="open" class="absolute w-full">
+    </div>
+  </div>
+</div>
+
+<script>
+document.body.addEventListener("{{ event_name }}", function (evt) {
+    let cid = document.getElementById('{{ name }}_id')
+    console.log(evt.detail.id);
+    cid.value = evt.detail.id;
+  })
+</script>

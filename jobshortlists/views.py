@@ -1,4 +1,3 @@
-import django_filters
 from django import forms
 from django.http import HttpRequest
 from django.shortcuts import HttpResponse, render
@@ -6,24 +5,50 @@ from django.contrib import messages
 from django_htmx.http import trigger_client_event
 
 
+from jobshortlists.filters import CompanyFilter
 from jobshortlists.forms import JobApplicationModelForm
-from jobshortlists.models import Company
+from jobshortlists.models import Company, JobStatus, JobType
 
 # Create your views here.
 
 
 def hx_joblist_form(request: HttpRequest):
-
     context = dict()
+
+    context['job_statuses'] = JobStatus.objects.all()
+    context['job_types'] = JobType.objects.all()
 
     if request.method == "POST":
         form: forms.ModelForm = JobApplicationModelForm(request.POST)
 
         if form.is_valid():
             form.save()
-            messages.success(request, "Job Successfully Submitted!")
+            res = HttpResponse()
+
+            res = trigger_client_event(
+                res,
+                "message",
+                {"type": "success",
+                 "message": "Job added to shortlist succesfully!"}
+            )
+
+            res = trigger_client_event(
+                res,
+                "job_added",
+            )
+            return res
         else:
-            messages.error(request, "There were some errors in the form!")
+            context['form'] = form
+            res = render(request, "forms/add_new_job.html", context=context)
+
+            return trigger_client_event(
+                res,
+                "message",
+                {
+                    "type": "error",
+                    "message": form.errors.as_text()
+                }
+            )
 
     else:
         form: forms.ModelForm = JobApplicationModelForm()
@@ -33,24 +58,6 @@ def hx_joblist_form(request: HttpRequest):
     return render(request, "forms/add_new_job.html", context=context)
 
 
-class EmptyStringFilter(django_filters.CharFilter):
-    def filter(self, qs, value):
-        if not value:
-            return qs.none()
-        return super().filter(qs, value)
-
-
-class CompanyFilter(django_filters.FilterSet):
-    company_name = EmptyStringFilter(
-        field_name="name",
-        lookup_expr="icontains"
-    )
-
-    class Meta:
-        model = Company
-        fields = ['name']
-
-
 def hx_company_filter(request: HttpRequest):
     """
     Give the companies by their name
@@ -58,7 +65,11 @@ def hx_company_filter(request: HttpRequest):
 
     filter = CompanyFilter(request.POST, queryset=Company.objects.all())
 
-    return render(request, "partials/search_output.html", {"filter": filter})
+    return render(
+        request,
+        "partials/company_search_output.html",
+        {"filter": filter}
+    )
 
 
 def hx_company_add(request: HttpRequest):

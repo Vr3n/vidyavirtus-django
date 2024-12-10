@@ -1,6 +1,7 @@
 from django.urls import path
-
-from jobshortlists.views import hx_company_add, hx_company_filter, hx_joblist_form
+from jobshortlists.views import (
+    hx_company_add, hx_company_filter,
+    hx_joblist_form)
 
 urlpatterns = [
     path("hx/add/", hx_joblist_form, name="hx_add_joblist"),

@@ -12,8 +12,9 @@
     <title>VidyaVirtus</title>
 
     {% compress css %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+      <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
     {% endcompress %}
+    <link rel="stylesheet" href="{% static 'css/swal.css' %}" />
 
     <script src="{% static 'vendors/htmx.min.js' %}" defer></script>
     {% django_htmx_script %}
@@ -35,6 +36,30 @@
 
     {% block custom_js %}
     {% endblock custom_js %}
+
+    <script>
+      document.body.addEventListener('message', function (evt) {
+        let toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 5000,
+          iconColor: 'white',
+          customClass: {
+            popup: 'colored-toast',
+          },
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        toast.fire({
+          icon: evt.detail.type,
+          title: evt.detail.message
+        })
+      });
+    </script>
 
     {% block custom_modals %}
     <!-- -->

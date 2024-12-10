@@ -1,0 +1,19 @@
+<c-vars required errors default_selected="Please select one option" />
+
+<div class="{{ div_class }}">
+  <label 
+    for="{{ id }}" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-500 {% if required %} after:content-['*'] after:text-red-600 {% endif %}"
+  >
+    {{ label }} 
+  </label>
+  <select id="{{ id }}" class="w-full rounded-md shadow-md hover:bg-gray-100 hover:shadow-lg hover:border-blue-800 focus:shadow-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" {{ attrs }}>
+    {% if default_selected %}
+    <option value="" selected>{{ default_selected }}</option>
+    {% endif %}
+    <!-- -->
+    {{ slot }}
+  </select>
+  {% if errors %}
+    <div class="my-2 text-sm text-red-600 dark:text-red-500">{{ errors.as_text }}</div>
+  {% endif %}
+</div>
