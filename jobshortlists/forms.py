@@ -23,7 +23,8 @@ class JobApplicationModelForm(forms.ModelForm):
             "min_salary",
             "source",
             "job_url",
-            "interest"
+            "interest",
+            "job_description",
         ]
 
 
