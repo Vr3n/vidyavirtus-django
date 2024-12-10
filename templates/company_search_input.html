@@ -19,27 +19,27 @@
 }">
   <div class="relative max-w-fit">
     <label class="block my-2" for="search_company">Search Company</label>
-    <input x-model="selected_value" id="{{ name }}_id" type="hidden" name="{{ name }}" />
+    <input x-model="selected_value" id="company_id" type="hidden" name="company_name" />
     <input
         type="text" 
-        id="search_{{name}}"
-        name="{{ filter_name }}" 
+        id="search_company"
+        name="company_name" 
         x-model="search"
         @keyup.debounce="toggle()"
         @keydown="if ($event.ctrlKey && $event.key === ' ') { !this.open }"
         hx-post="{% url 'hx_company_filter' %}"
         hx-trigger="input changed delay:500ms, search"
-        hx-target="#search_results_{{ filter_name }}"
+        hx-target="#search_results"
         hx-swap="outerHTML"
     />
-    <div id="search_results_{{ filter_name }}" x-show="open" class="absolute w-full">
+    <div id="search_results" x-show="open" class="absolute w-full">
     </div>
   </div>
 </div>
 
 <script>
-document.body.addEventListener("{{ event_name }}", function (evt) {
-    let cid = document.getElementById('{{ name }}_id')
+  document.body.addEventListener("company_added", function (evt) {
+    let cid = document.getElementById('company_id')
     console.log(evt.detail.id);
     cid.value = evt.detail.id;
   })
