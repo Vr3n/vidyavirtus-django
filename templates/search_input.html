@@ -1,0 +1,34 @@
+<div x-data="{ 
+  'search': '',
+  'open': false,
+  'selected_value': '' ,
+  toggle () { 
+    this.search.length >= 1 ? this.open = true : this.open = false 
+  },
+  selectValue (value, name) {
+    this.selected_value = value;
+    this.search = name;
+    this.open = false;
+  }
+}">
+  <div class="relative max-w-fit">
+    <label for="search_company">Search Company</label>
+    <span id="search_input">
+      <input x-model="selected_value" type="hidden" name="company" />
+      <input
+        type="text" 
+        id="search_company"
+        name="company_name" 
+        x-model="search"
+        @keyup.debounce="toggle()"
+        @keydown="if ($event.ctrlKey && $event.key === ' ') { !this.open }"
+        hx-post="{% url 'hx_company_filter' %}"
+        hx-trigger="input changed delay:500ms, search"
+        hx-target="#search_results"
+        hx-swap="outerHTML"
+      />
+    </span>
+    <div id="search_results" x-show="open" class="absolute w-full">
+    </div>
+  </div>
+</div>

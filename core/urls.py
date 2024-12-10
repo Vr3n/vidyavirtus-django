@@ -24,4 +24,5 @@ urlpatterns = [
     path("__reload__/", include("django_browser_reload.urls")),
     path('', index, name="home"),
     path('accounts/', include('allauth.urls')),
+    path('joblist/', include('jobshortlists.urls')),
 ]

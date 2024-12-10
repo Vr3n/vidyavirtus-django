@@ -1,0 +1,17 @@
+<div id="search_results" x-show="open" @click.outside="open = false" class="absolute block  z-10 w-full border border-gray-200 bg-white rounded-md">
+  <div class="cursor-pointer flex flex-col justify-between">
+    {% for obj in filter.qs %}
+      <p 
+        @click="selectValue({{ obj.id }}, '{{ obj.name }}')"
+        class="hover:bg-gray-200 p-4"
+      >{{ obj.name }}</p>
+    {% empty %}
+      <p 
+        :class="search.length >= 1 && 'p-4 hover:bg-gray-200'"
+        x-text="search"
+        hx-include="#search_company"
+        hx-post="{% url 'hx_company_search_add' %}"
+        @click="open = false"
+      ></p>
+    {% endfor %}
+  </div>

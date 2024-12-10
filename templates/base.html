@@ -1,4 +1,6 @@
 <!-- -->
+{% load django_htmx %}
+<!-- -->
 {% load compress %}
 <!-- -->
 {% load static %}
@@ -7,21 +9,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Template</title>
+    <title>VidyaVirtus</title>
 
     {% compress css %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
     {% endcompress %}
 
     <script src="{% static 'vendors/htmx.min.js' %}" defer></script>
+    {% django_htmx_script %}
     <script src="{% static 'vendors/alpine.min.js' %}" defer></script>
-
   </head>
-  <body>
+  <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     {% include "navbar.html" %}
     <!-- -->
     
-    <main class="mx-auto max-w-screen-xl p-4">
+    <main class="p-4">
       {% block content %}
 
       {% endblock content %}
@@ -30,5 +32,13 @@
 
     <!-- -->
     {% include "includes/scripts.html" %}
+
+    {% block custom_js %}
+    {% endblock custom_js %}
+
+    {% block custom_modals %}
+    <!-- -->
+    {% endblock custom_modals %}
+
   </body>
 </html>

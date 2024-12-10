@@ -40,14 +40,17 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'custom_commands.apps.CustomCommandsConfig',
     'django.contrib.staticfiles',
+
     "django_browser_reload",
     'compressor',
     'django_cotton',
+    "django_htmx",
 
     'allauth',
     'allauth.account',
     'allauth.socialaccount.providers.google',
     'djmoney',
+    "django_filters",
 
     'users',
     'jobshortlists',
@@ -61,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django_htmx.middleware.HtmxMiddleware",
     # Add the account middleware:
     "allauth.account.middleware.AccountMiddleware",
     "django_browser_reload.middleware.BrowserReloadMiddleware",
