@@ -1,12 +1,11 @@
-from django import forms
-
-from jobshortlists.models import Company, JobApplication
+from core.customizations.forms import TailwindModelForm
+from jobshortlists.models import Company, JobApplication, JobStatus, JobType
 
 
 # Create your forms here.
 
 
-class JobApplicationModelForm(forms.ModelForm):
+class JobApplicationModelForm(TailwindModelForm):
     """
     Add a new job to shortlist.
     """
@@ -27,8 +26,16 @@ class JobApplicationModelForm(forms.ModelForm):
             "job_description",
         ]
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-class HxCompanyForm(forms.ModelForm):
+        # Setting the queryset for fk fields.
+        self.fields['status'].queryset = JobStatus.objects.all()
+        self.fields['company_name'].queryset = Company.objects.all()
+        self.fields['job_type'].queryset = JobType.objects.all()
+
+
+class HxCompanyForm(TailwindModelForm):
     """
     Form for dynamically adding company.
     """

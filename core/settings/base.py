@@ -54,6 +54,8 @@ INSTALLED_APPS = [
 
     'users',
     'jobshortlists',
+
+    'django.forms',
 ]
 
 MIDDLEWARE = [

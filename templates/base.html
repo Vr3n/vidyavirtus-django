@@ -15,10 +15,13 @@
       <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
     {% endcompress %}
     <link rel="stylesheet" href="{% static 'css/swal.css' %}" />
+    <link rel="stylesheet" href="{% static 'vendors/tomselect.min.css' %}" />
+    {{form.media}}
 
     <script src="{% static 'vendors/htmx.min.js' %}" defer></script>
     {% django_htmx_script %}
     <script src="{% static 'vendors/alpine.min.js' %}" defer></script>
+
   </head>
   <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     {% include "navbar.html" %}

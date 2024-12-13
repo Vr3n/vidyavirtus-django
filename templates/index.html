@@ -6,7 +6,7 @@
   <h2 class="text-2xl font-bold">Hello, Viren Patel</h2>
   <!-- end Heading -->
 
-  <c-card class="mt-2">
+  <c-card custom_class="mt-2">
     <div class="flex justify-between gap-4 mb-4">
       <div>
         <h2 class="text-xl">Your Job Shortlists</h2>
@@ -24,7 +24,7 @@
          >
           Add new job shortlist
         </c-button.primary>
-        <c-button.outline>
+        <c-button.outline color="blue">
           Schedule interview
         </c-button>
       </div>
@@ -52,7 +52,33 @@
 
 {% block custom_modals %}
 <c-sheet id="add_new_shortlist_drawer" header_title="Add New Job">
-  <span hx-trigger="intersect" hx-get="{% url 'hx_add_joblist' %}" hx-target="this">
+  <span hx-trigger="intersect once" id="jobshortlist_forms" hx-get="{% url 'hx_add_joblist' %}" hx-target="this" hx-swap="beforeend">
   </span>
+  <c-button.primary 
+    hx-get="{% url 'hx_add_joblist' %}" 
+    custom_class="bg-gray-800 w-11/12  mx-4"
+    hx-target="#jobshortlist_forms"
+    hx-swap="beforeend"
+  >
+    <span class="flex items-center justify-center w-full gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+      </svg>
+      Add Extra Job.
+    </span>
+  </c-button.primary>
+  <div class="mx-4">
+    <c-button.primary id="submit-all"
+      onClick="Swal.fire({ 
+        title: 'Confirm', text: 'Are you sure you want to submit all forms?' 
+      }).then((result) => {
+        if (result.isConfirmed) {
+          htmx.trigger(this, 'submit-all-forms')
+        }
+      })"
+    >
+      Submit All Forms
+    </c-button.primary>
+  </div>
 </c-sheet>
 {% endblock custom_modals %}
